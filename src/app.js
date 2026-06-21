@@ -9,6 +9,8 @@ import { env } from "./config/env.js";
 
 // Versioned routes
 import v1Routes from "./api/v1/routes/index.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
+import { ApiResponse } from "./utils/ApiResponse.js";
 // import v2Routes from "./api/v2/routes/index.js";
 
 // Global middlewares
@@ -44,10 +46,17 @@ app.use(express.urlencoded({ extended: true }));
 // HEALTH CHECK
 // ===============================
 app.get("/health", (req, res) => {
-  res.status(200).json({
-    status: "OK",
-    message: "Server is running 🚀",
-  });
+
+  res.status(200).json(new ApiResponse({
+      message: "Server is running 🚀",
+      data: user,
+    }));
+   
+
+  // res.status(200).json({
+  //   status: "OK",
+  //   message: "Server is running 🚀",
+  // });
 });
 
 // ===============================
@@ -69,7 +78,7 @@ app.use((req, res, next) => {
 // ===============================
 // GLOBAL ERROR HANDLER
 // ===============================
-// app.use(errorMiddleware);
+app.use(errorHandler);
 
 // ===============================
 export default app;
